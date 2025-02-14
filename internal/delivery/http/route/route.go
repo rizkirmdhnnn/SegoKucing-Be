@@ -8,8 +8,8 @@ import (
 type RouteConfig struct {
 	App            *fiber.App
 	UserController *controller.UserController
-	// BalanceController *http.BalanceController
-	// AuthMiddleware fiber.Handler
+	PostController *controller.PostController
+	AuthMiddleware fiber.Handler
 }
 
 func (c *RouteConfig) Setup() {
@@ -23,7 +23,8 @@ func (c *RouteConfig) SetupGuestRoute() {
 }
 
 func (c *RouteConfig) SetupAuthenticatedRoute() {
-	// c.App.Use(c.AuthMiddleware)
+	c.App.Use(c.AuthMiddleware)
+	c.App.Post("/v1/post", c.PostController.CreatePost)
 	// c.App.Put("/api/users", c.UserController.Update)
 
 	// c.App.Get("/api/balance", c.BalanceController.BalanceInquiry)

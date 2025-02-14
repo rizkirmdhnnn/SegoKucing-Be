@@ -9,12 +9,12 @@ import (
 )
 
 type UserController struct {
-	UseCase *usecase.UserUseCase
+	userUC *usecase.UserUseCase
 }
 
-func NewUserController(useCase *usecase.UserUseCase) *UserController {
+func NewUserController(userUC *usecase.UserUseCase) *UserController {
 	return &UserController{
-		UseCase: useCase,
+		userUC: userUC,
 	}
 }
 
@@ -22,14 +22,14 @@ func (c *UserController) Register(ctx *fiber.Ctx) error {
 	request := new(model.RegisterUserRequest)
 	err := ctx.BodyParser(request)
 	if err != nil {
-		log.Println(err)
-		return fiber.ErrBadRequest
+		log.Printf("Error parsing request body in Register: %v", err)
+		return fiber.NewError(fiber.StatusBadRequest, "Failed to register user")
 	}
 
-	response, err := c.UseCase.CreateUser(ctx.UserContext(), request)
+	response, err := c.userUC.CreateUser(ctx.UserContext(), request)
 	if err != nil {
-		log.Println(err)
-		return err
+		log.Printf("Error logging in user: %v", err)
+		return fiber.NewError(fiber.StatusBadRequest, "Failed to register user")
 	}
 
 	return ctx.JSON(
@@ -45,13 +45,13 @@ func (c *UserController) Login(ctx *fiber.Ctx) error {
 	err := ctx.BodyParser(request)
 	if err != nil {
 		log.Println(err)
-		return fiber.ErrBadRequest
+		return fiber.NewError(fiber.StatusBadRequest, "Failed to login")
 	}
 
-	response, err := c.UseCase.Login(ctx.UserContext(), request)
+	response, err := c.userUC.Login(ctx.UserContext(), request)
 	if err != nil {
 		log.Println(err)
-		return err
+		return fiber.NewError(fiber.StatusBadRequest, "Failed to login")
 	}
 
 	return ctx.JSON(

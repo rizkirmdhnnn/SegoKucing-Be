@@ -16,15 +16,15 @@ import (
 )
 
 type UserUseCase struct {
-	Validate       *validator.Validate
 	UserRepository *repository.UserRepository
+	Validate       *validator.Validate
 	Viper          *viper.Viper
 }
 
-func NewUserUseCase(validate *validator.Validate, userRepository *repository.UserRepository, viper *viper.Viper) *UserUseCase {
+func NewUserUseCase(userRepository *repository.UserRepository, validate *validator.Validate, viper *viper.Viper) *UserUseCase {
 	return &UserUseCase{
-		Validate:       validate,
 		UserRepository: userRepository,
+		Validate:       validate,
 		Viper:          viper,
 	}
 }
@@ -76,7 +76,7 @@ func (c *UserUseCase) CreateUser(ctx context.Context, request *model.RegisterUse
 	}
 
 	// Generate JWT token
-	token, err := utils.GenerateToken(int(user.ID), c.Viper.GetInt("JWT_EXPIRATION"), c.Viper.GetString("JWT_SECRET"))
+	token, err := utils.GenerateToken(user.ID, c.Viper)
 	if err != nil {
 		log.Println(err)
 		return nil, fiber.ErrInternalServerError
@@ -125,7 +125,7 @@ func (c *UserUseCase) Login(ctx context.Context, request *model.LoginUserRequest
 	}
 
 	// Generate JWT token
-	token, err := utils.GenerateToken(int(user.ID), c.Viper.GetInt("JWT_EXPIRATION"), c.Viper.GetString("JWT_SECRET"))
+	token, err := utils.GenerateToken(user.ID, c.Viper)
 	if err != nil {
 		log.Println(err)
 		return nil, fiber.ErrInternalServerError
