@@ -7,9 +7,8 @@ import (
 )
 
 type CreatePostRequest struct {
-	PostInHtml string `json:"postInHtml" validate:"required"`
-
-	Tags []string `json:"tags" validate:"required"`
+	PostInHtml string   `json:"postInHtml" validate:"required,min=2,max=500"`
+	Tags       []string `json:"tags" validate:"required"`
 }
 
 type CreatePostResponse struct {
@@ -17,5 +16,3 @@ type CreatePostResponse struct {
 	Tag       []entity.Tags `json:"tag,omitempty"`
 	CreatedAt time.Time     `json:"created_at"`
 }
-
-//TODO: Tag belum diimplementasi

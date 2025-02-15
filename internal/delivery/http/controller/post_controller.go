@@ -37,8 +37,8 @@ func (c *PostController) CreatePost(ctx *fiber.Ctx) error {
 	// Call PostUseCase to create post
 	response, err := c.postUC.CreatePost(newCtx, request)
 	if err != nil {
-		log.Println(err)
-		return fiber.NewError(fiber.StatusInternalServerError, "Failed to create post")
+		log.Printf("Error creating post for user_id %d: %v", userid, err)
+		return err
 	}
 
 	// Return JSON response

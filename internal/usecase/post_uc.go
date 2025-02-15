@@ -32,8 +32,7 @@ func (c *PostUseCase) CreatePost(ctx context.Context, request *model.CreatePostR
 	// Validate request
 	err := c.Validate.Struct(request)
 	if err != nil {
-		log.Println(err)
-		return nil, fiber.ErrBadRequest
+		return nil, fiber.NewError(fiber.StatusBadRequest, err.Error())
 	}
 
 	// Get user ID from context
@@ -49,12 +48,12 @@ func (c *PostUseCase) CreatePost(ctx context.Context, request *model.CreatePostR
 	post, err = c.PostRepository.Create(post)
 	if err != nil {
 		log.Println(err)
-		return nil, fiber.ErrInternalServerError
+		return nil, fiber.NewError(fiber.StatusBadRequest, "Failed to create post")
 	}
 
 	err = c.TagsRepo.AssignTagsToPost(ctx, post.ID, request.Tags)
 	if err != nil {
-		return nil, err
+		return nil, fiber.NewError(fiber.StatusBadRequest, "Failed to assign tags to post")
 	}
 
 	return &model.CreatePostResponse{

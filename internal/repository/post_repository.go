@@ -23,3 +23,13 @@ func (r *PostRepository) Create(post *entity.Posts) (*entity.Posts, error) {
 
 	return post, nil
 }
+
+func (r *PostRepository) GetByID(id int64) (*entity.Posts, error) {
+	var post entity.Posts
+	err := r.DB.First(&post, id).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &post, nil
+}

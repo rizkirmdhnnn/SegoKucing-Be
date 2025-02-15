@@ -24,24 +24,28 @@ func Bootstrap(config *BootstrapConfig) {
 	userRepository := repository.NewUserRepository(config.DB)
 	postRepository := repository.NewPostRepository(config.DB)
 	tagsRepository := repository.NewTagRepository(config.DB)
+	commentRepository := repository.NewCommentRepository(config.DB)
 
-	// // Usecase
+	//Usecase
 	userUseCase := usecase.NewUserUseCase(userRepository, config.Validate, config.Config)
 	postUseCase := usecase.NewPostUseCase(postRepository, tagsRepository, config.Validate, config.Config)
+	commentUseCase := usecase.NewCommentUseCase(commentRepository, postRepository, config.Validate, config.Config)
 
-	// // Controller
+	//Controller
 	userController := controller.NewUserController(userUseCase)
 	PostController := controller.NewPostController(postUseCase)
+	commentController := controller.NewCommentController(commentUseCase)
 
 	// // Middleware
 	authMiddleware := middleware.NewAuth(config.Config)
 
 	// // Route
 	routeConfig := route.RouteConfig{
-		App:            config.App,
-		UserController: userController,
-		PostController: PostController,
-		AuthMiddleware: authMiddleware,
+		App:               config.App,
+		UserController:    userController,
+		PostController:    PostController,
+		CommentController: commentController,
+		AuthMiddleware:    authMiddleware,
 	}
 
 	routeConfig.Setup()
