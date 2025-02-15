@@ -10,6 +10,7 @@ type RouteConfig struct {
 	UserController    *controller.UserController
 	PostController    *controller.PostController
 	CommentController *controller.CommentController
+	FriendController  *controller.FriendController
 	AuthMiddleware    fiber.Handler
 }
 
@@ -28,4 +29,6 @@ func (c *RouteConfig) SetupAuthenticatedRoute() {
 	c.App.Post("/v1/post", c.PostController.CreatePost)
 
 	c.App.Post("/v1/post/comment", c.CommentController.CreateComment)
+
+	c.App.Post("/v1/friend", c.FriendController.AddFriend)
 }

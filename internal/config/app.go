@@ -25,16 +25,19 @@ func Bootstrap(config *BootstrapConfig) {
 	postRepository := repository.NewPostRepository(config.DB)
 	tagsRepository := repository.NewTagRepository(config.DB)
 	commentRepository := repository.NewCommentRepository(config.DB)
+	friendRepository := repository.NewFriendRepository(config.DB)
 
 	//Usecase
 	userUseCase := usecase.NewUserUseCase(userRepository, config.Validate, config.Config)
 	postUseCase := usecase.NewPostUseCase(postRepository, tagsRepository, config.Validate, config.Config)
 	commentUseCase := usecase.NewCommentUseCase(commentRepository, postRepository, config.Validate, config.Config)
+	friendUseCase := usecase.NewFriendUsecase(friendRepository, userRepository, config.Validate, config.Config)
 
 	//Controller
 	userController := controller.NewUserController(userUseCase)
 	PostController := controller.NewPostController(postUseCase)
 	commentController := controller.NewCommentController(commentUseCase)
+	friendController := controller.NewFriendController(friendUseCase)
 
 	// // Middleware
 	authMiddleware := middleware.NewAuth(config.Config)
@@ -45,6 +48,7 @@ func Bootstrap(config *BootstrapConfig) {
 		UserController:    userController,
 		PostController:    PostController,
 		CommentController: commentController,
+		FriendController:  friendController,
 		AuthMiddleware:    authMiddleware,
 	}
 
