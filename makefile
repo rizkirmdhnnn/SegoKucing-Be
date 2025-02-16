@@ -21,3 +21,10 @@ migration_down:
 migration_fix: 
 	@echo "Running migration fix..."	
 	migrate -path db/migrations/ -database "postgresql://rizkirmdhn:rizkirmdhn@localhost:5432/segokucing?sslmode=disable" force VERSION
+
+# Seed
+seed:
+	@echo
+	@echo "Seeding data..."
+	@echo
+	go run cmd/seed/main.go
