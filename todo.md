@@ -5,11 +5,11 @@
 ### Backlog
 
 - [ ] Get all posts
-- [ ] Get all friends
 
 ### In Progress
 
 - [x] Create Comment
+- [x] Get all friends
 
 ### Completed
 

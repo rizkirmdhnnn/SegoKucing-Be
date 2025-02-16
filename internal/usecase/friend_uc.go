@@ -58,3 +58,42 @@ func (f *FriendUsecase) AddFriend(ctx context.Context, req *model.AddFriendReque
 		Message: "Success",
 	}, nil
 }
+
+func (f *FriendUsecase) GetFriendList(ctx context.Context, limit, offset int) (*model.GetFriendListResponse, error) {
+	userID := ctx.Value("user_id").(int64)
+
+	friends, err := f.friendRepo.GetFriendList(ctx, userID, limit, offset)
+	if err != nil {
+		return nil, err
+	}
+
+	friendCount, err := f.friendRepo.GetFriendCount(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	meta := model.Meta{
+		Limit:  limit,
+		Offset: offset,
+		Total:  friendCount,
+	}
+
+	friendModel := make([]model.Friend, 0)
+	for _, friend := range friends {
+		if friend.Friend.ImageUrl == "" {
+			friend.Friend.ImageUrl = "https://ui-avatars.com/api/?name=" + friend.Friend.Name
+		}
+		friendModel = append(friendModel, model.Friend{
+			UserID:      friend.FriendID,
+			Name:        friend.Friend.Name,
+			ImageUrl:    friend.Friend.ImageUrl,
+			FriendCount: friendCount,
+			CreatedAt:   friend.CreatedAt,
+		})
+	}
+
+	return &model.GetFriendListResponse{
+		Friends: friendModel,
+		Meta:    meta,
+	}, nil
+}

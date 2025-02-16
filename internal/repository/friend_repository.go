@@ -35,3 +35,23 @@ func (f *FriendRepository) GetFriendByUserIDAndFriendID(ctx context.Context, use
 
 	return &friend, nil
 }
+
+func (f *FriendRepository) GetFriendCount(ctx context.Context, userID int64) (int, error) {
+	var count int64
+	err := f.DB.Model(&entity.Friends{}).Where("user_id = ?", userID).Count(&count).Error
+	if err != nil {
+		return 0, err
+	}
+
+	return int(count), nil
+}
+
+func (f *FriendRepository) GetFriendList(ctx context.Context, userID int64, limit, offset int) ([]entity.Friends, error) {
+	var friends []entity.Friends
+	err := f.DB.Where("user_id = ?", userID).Limit(limit).Offset(offset).Preload("Friend").Find(&friends).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return friends, nil
+}

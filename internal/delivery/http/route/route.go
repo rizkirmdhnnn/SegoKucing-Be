@@ -31,4 +31,5 @@ func (c *RouteConfig) SetupAuthenticatedRoute() {
 	c.App.Post("/v1/post/comment", c.CommentController.CreateComment)
 
 	c.App.Post("/v1/friend", c.FriendController.AddFriend)
+	c.App.Get("/v1/friend", c.FriendController.GetFriendList)
 }
