@@ -79,9 +79,8 @@ func (f *FriendController) GetFriendList(ctx *fiber.Ctx) error {
 	}
 
 	ctx.Status(fiber.StatusOK).JSON(fiber.Map{
-		"message": "success get friend list",
-		"data":    response.Friends,
-		"meta":    response.Meta,
+		"data": response.Friends,
+		"meta": response.Meta,
 	})
 
 	return nil
