@@ -9,10 +9,10 @@
 ### In Progress
 
 - [x] Create Comment
-- [x] Get all friends
 
 ### Completed
 
 - [x] Add friend
 - [x] Create Post
 - [x] Authentication
+- [x] Get all friends

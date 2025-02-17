@@ -27,6 +27,15 @@ type GetFriendListResponse struct {
 	Meta    Meta     `json:"meta"`
 }
 
+type GetFriendListParams struct {
+	Limit      int
+	Offset     int
+	SortBy     string
+	OrderBy    string
+	OnlyFriend bool
+	Search     string
+}
+
 func (a *AddFriendRequest) ToEntity() *entity.Friends {
 	return &entity.Friends{
 		FriendID: a.UserId,

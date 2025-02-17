@@ -68,9 +68,18 @@ func (f *FriendController) GetFriendList(ctx *fiber.Ctx) error {
 		return err
 	}
 
+	params := &model.GetFriendListParams{
+		Limit:      limit,
+		Offset:     offset,
+		OrderBy:    ctx.Query("orderBy", "DESC"),
+		SortBy:     ctx.Query("sortBy", "created_at"),
+		Search:     ctx.Query("search", ""),
+		OnlyFriend: ctx.Query("only_friend", "false") == "true",
+	}
+
 	newCtx := context.WithValue(ctx.UserContext(), "user_id", userid)
 
-	response, err := f.friendUsecase.GetFriendList(newCtx, limit, offset)
+	response, err := f.friendUsecase.GetFriendList(newCtx, params)
 	if err != nil {
 		ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": "Internal Server Error",

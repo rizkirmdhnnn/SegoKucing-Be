@@ -59,10 +59,15 @@ func (f *FriendUsecase) AddFriend(ctx context.Context, req *model.AddFriendReque
 	}, nil
 }
 
-func (f *FriendUsecase) GetFriendList(ctx context.Context, limit, offset int) (*model.GetFriendListResponse, error) {
+func (f *FriendUsecase) GetFriendList(ctx context.Context, params *model.GetFriendListParams) (*model.GetFriendListResponse, error) {
 	userID := ctx.Value("user_id").(int64)
 
-	friends, err := f.friendRepo.GetFriendList(ctx, userID, limit, offset)
+	// validate order by only allow created_at and friendCount
+	if params.SortBy != "created_at" && params.SortBy != "friendCount" {
+		return nil, fiber.NewError(fiber.StatusBadRequest, "Invalid order by")
+	}
+
+	friends, meta, err := f.friendRepo.GetFriendList(ctx, userID, params)
 	if err != nil {
 		return nil, err
 	}
@@ -70,12 +75,6 @@ func (f *FriendUsecase) GetFriendList(ctx context.Context, limit, offset int) (*
 	friendCount, err := f.friendRepo.GetFriendCount(ctx, userID)
 	if err != nil {
 		return nil, err
-	}
-
-	meta := model.Meta{
-		Limit:  limit,
-		Offset: offset,
-		Total:  friendCount,
 	}
 
 	friendModel := make([]model.Friend, 0)
