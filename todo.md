@@ -4,7 +4,7 @@
 
 ### Backlog
 
-- [ ] Get all posts
+- [ ] Delete Friend
 
 ### In Progress
 
@@ -16,3 +16,4 @@
 - [x] Create Post
 - [x] Authentication
 - [x] Get all friends
+- [x] Get all posts

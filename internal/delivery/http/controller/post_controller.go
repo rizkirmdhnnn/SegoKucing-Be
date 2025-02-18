@@ -3,6 +3,7 @@ package controller
 import (
 	"context"
 	"log"
+	"strings"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/rizkirmdhnnn/segokucing-be/internal/model"
@@ -46,6 +47,44 @@ func (c *PostController) CreatePost(ctx *fiber.Ctx) error {
 		fiber.Map{
 			"message": "Post created successfully",
 			"data":    response,
+		},
+	)
+}
+
+// GetPostList handles the retrieval of a list of posts.
+// It parses the query parameters into a GetPostListParams model and calls the PostUseCase to get the list of posts.
+// It returns a JSON response with the result.
+func (c *PostController) GetPostList(ctx *fiber.Ctx) error {
+	userid := ctx.Locals("user_id").(int64)
+
+	request := new(model.GetPostListParams)
+	err := ctx.QueryParser(request)
+	if err != nil {
+		log.Printf("Error getting post list: %v", err)
+		return fiber.ErrBadRequest
+	}
+
+	params := &model.GetPostListParams{
+		Limit:     ctx.QueryInt("limit", 10),
+		Offset:    ctx.QueryInt("offset", 0),
+		Search:    ctx.Query("search", ""),
+		SearchTag: strings.Split(ctx.Query("searchTag", ""), ","),
+	}
+
+	newCtx := context.WithValue(ctx.UserContext(), "user_id", userid)
+
+	// Call PostUseCase to get all posts
+	posts, meta, err := c.postUC.GetAllPosts(newCtx, params)
+	if err != nil {
+		log.Printf("Error getting post list: %v", err)
+		return err
+	}
+
+	// Return JSON response
+	return ctx.JSON(
+		fiber.Map{
+			"data": posts,
+			"meta": meta,
 		},
 	)
 }

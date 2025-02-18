@@ -61,3 +61,15 @@ func (c *PostUseCase) CreatePost(ctx context.Context, request *model.CreatePostR
 		CreatedAt: post.CreatedAt,
 	}, nil
 }
+
+// get all posts
+func (c *PostUseCase) GetAllPosts(ctx context.Context, params *model.GetPostListParams) (*[]model.Post, *model.Meta, error) {
+	// Get user ID from context
+	userId := ctx.Value("user_id").(int64)
+	posts, meta, err := c.PostRepository.GetAllPosts(ctx, userId, params)
+	if err != nil {
+		return nil, nil, fiber.NewError(fiber.StatusBadRequest, "Failed to get posts")
+	}
+
+	return posts, meta, nil
+}
