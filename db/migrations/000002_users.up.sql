@@ -7,3 +7,7 @@ CREATE TABLE users (
     image_url TEXT DEFAULT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
+
+CREATE INDEX idx_users_email ON users(email);
+
+CREATE INDEX idx_users_phone ON users(phone);

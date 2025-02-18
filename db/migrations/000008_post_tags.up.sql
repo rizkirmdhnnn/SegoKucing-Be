@@ -5,3 +5,5 @@ CREATE TABLE post_tags (
     FOREIGN KEY (posts_id) REFERENCES posts (id),
     FOREIGN KEY (tags_id) REFERENCES tags (id)
 );
+
+CREATE INDEX idx_post_tags_posts_id ON post_tags(posts_id);

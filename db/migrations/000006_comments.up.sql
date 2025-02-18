@@ -6,4 +6,6 @@ CREATE TABLE comments (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     foreign key (post_id) references posts(id),
     foreign key (user_id) references users(id)
-)
+);
+
+CREATE INDEX idx_comments_post_id ON comments(post_id);

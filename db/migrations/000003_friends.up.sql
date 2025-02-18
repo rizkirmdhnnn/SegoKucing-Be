@@ -6,3 +6,7 @@ CREATE TABLE friends (
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (friend_id) REFERENCES users(id)
 );
+
+CREATE INDEX idx_friends_user_id ON friends(user_id);
+
+CREATE INDEX idx_friends_friend_id ON friends(friend_id);
