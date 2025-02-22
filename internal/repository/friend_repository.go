@@ -97,3 +97,15 @@ func (f *FriendRepository) GetFriendList(ctx context.Context, userID int64, para
 
 	return friends, meta, nil
 }
+
+func (f *FriendRepository) IsFriend(ctx context.Context, userID, friendID int64) (bool, error) {
+	var count int64
+	err := f.DB.Model(&entity.Friends{}).
+		Where("user_id = ? AND friend_id = ?", userID, friendID).
+		Count(&count).Error
+	if err != nil {
+		return false, err
+	}
+
+	return count > 0, nil
+}

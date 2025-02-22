@@ -30,7 +30,7 @@ func Bootstrap(config *BootstrapConfig) {
 	//Usecase
 	userUseCase := usecase.NewUserUseCase(userRepository, config.Validate, config.Config)
 	postUseCase := usecase.NewPostUseCase(postRepository, tagsRepository, config.Validate, config.Config)
-	commentUseCase := usecase.NewCommentUseCase(commentRepository, postRepository, config.Validate, config.Config)
+	commentUseCase := usecase.NewCommentUseCase(commentRepository, friendRepository, postRepository, config.Validate, config.Config)
 	friendUseCase := usecase.NewFriendUsecase(friendRepository, userRepository, config.Validate, config.Config)
 
 	//Controller
