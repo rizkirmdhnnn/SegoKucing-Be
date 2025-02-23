@@ -4,10 +4,11 @@
 
 ### Backlog
 
+- [ ] Link Phone Number or Email to Account
+- [ ] Update Profile
 
 ### In Progress
 
-- [x] Delete Friend
 
 ### Completed
 
@@ -17,3 +18,4 @@
 - [x] Get all friends
 - [x] Get all posts
 - [x] Create Comment
+- [x] Delete Friend
