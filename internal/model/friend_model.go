@@ -36,6 +36,14 @@ type GetFriendListParams struct {
 	Search     string
 }
 
+type RemoveFriendRequest struct {
+	UserId int64 `json:"userId" validate:"required"`
+}
+
+type RemoveFriendResponse struct {
+	Message string `json:"message"`
+}
+
 func (a *AddFriendRequest) ToEntity() *entity.Friends {
 	return &entity.Friends{
 		FriendID: a.UserId,

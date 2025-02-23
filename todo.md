@@ -4,11 +4,10 @@
 
 ### Backlog
 
-- [ ] Delete Friend
 
 ### In Progress
 
-- [x] Create Comment
+- [x] Delete Friend
 
 ### Completed
 
@@ -17,3 +16,4 @@
 - [x] Authentication
 - [x] Get all friends
 - [x] Get all posts
+- [x] Create Comment

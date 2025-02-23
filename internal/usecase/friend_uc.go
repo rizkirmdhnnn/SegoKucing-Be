@@ -8,6 +8,7 @@ import (
 	"github.com/rizkirmdhnnn/segokucing-be/internal/model"
 	"github.com/rizkirmdhnnn/segokucing-be/internal/repository"
 	"github.com/spf13/viper"
+	"gorm.io/gorm"
 )
 
 type FriendUsecase struct {
@@ -94,5 +95,32 @@ func (f *FriendUsecase) GetFriendList(ctx context.Context, params *model.GetFrie
 	return &model.GetFriendListResponse{
 		Friends: friendModel,
 		Meta:    meta,
+	}, nil
+}
+
+func (f *FriendUsecase) RemoveFriend(ctx context.Context, friend *model.RemoveFriendRequest) (*model.RemoveFriendResponse, error) {
+	userID := ctx.Value("user_id").(int64)
+
+	_, err := f.userRepo.GetUserById(int(friend.UserId))
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, fiber.NewError(fiber.StatusBadRequest, "User not found")
+		}
+	}
+
+	_, err = f.friendRepo.GetFriendByUserIDAndFriendID(ctx, userID, friend.UserId)
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, fiber.NewError(fiber.StatusBadRequest, "Friend not found")
+		}
+	}
+
+	err = f.friendRepo.RemoveFriend(ctx, userID, friend.UserId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.RemoveFriendResponse{
+		Message: "Success",
 	}, nil
 }

@@ -109,3 +109,12 @@ func (f *FriendRepository) IsFriend(ctx context.Context, userID, friendID int64)
 
 	return count > 0, nil
 }
+
+func (f *FriendRepository) RemoveFriend(ctx context.Context, userID, friendID int64) error {
+	err := f.DB.Where("user_id = ? AND friend_id = ?", userID, friendID).Delete(&entity.Friends{}).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

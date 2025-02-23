@@ -94,3 +94,31 @@ func (f *FriendController) GetFriendList(ctx *fiber.Ctx) error {
 
 	return nil
 }
+
+func (f *FriendController) RemoveFriend(ctx *fiber.Ctx) error {
+	userid := ctx.Locals("user_id").(int64)
+	request := new(model.RemoveFriendRequest)
+	err := ctx.BodyParser(request)
+	if err != nil {
+		ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Bad Request",
+		})
+		return err
+	}
+
+	newCtx := context.WithValue(ctx.UserContext(), "user_id", userid)
+
+	response, err := f.friendUsecase.RemoveFriend(newCtx, request)
+	if err != nil {
+		ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Internal Server Error",
+		})
+		return err
+	}
+
+	ctx.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": response.Message,
+	})
+
+	return nil
+}
