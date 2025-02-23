@@ -4,11 +4,11 @@
 
 ### Backlog
 
-- [ ] Link Phone Number or Email to Account
 - [ ] Update Profile
 
 ### In Progress
 
+- [x] Link Phone Number or Email to Account
 
 ### Completed
 

@@ -26,6 +26,9 @@ func (c *RouteConfig) SetupGuestRoute() {
 
 func (c *RouteConfig) SetupAuthenticatedRoute() {
 	c.App.Use(c.AuthMiddleware)
+
+	c.App.Post("/v1/user/link", c.UserController.LinkEmail)
+
 	c.App.Post("/v1/post", c.PostController.CreatePost)
 	c.App.Get("/v1/post", c.PostController.GetPostList)
 

@@ -69,3 +69,7 @@ func (r *UserRepository) GetUserById(id int) (*entity.Users, error) {
 
 	return &user, nil
 }
+
+func (r *UserRepository) Update(user *entity.Users) error {
+	return r.db.Save(user).Error
+}

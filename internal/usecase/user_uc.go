@@ -139,3 +139,46 @@ func (c *UserUseCase) Login(ctx context.Context, request *model.LoginUserRequest
 		AccessToken: token,
 	}, nil
 }
+
+// link email
+func (c *UserUseCase) LinkEmail(ctx context.Context, request *model.LinkEmailRequest) error {
+	userId := ctx.Value("user_id").(int64)
+
+	// Validate request
+	err := c.Validate.Struct(request)
+	if err != nil {
+		log.Println(err)
+		return fiber.ErrBadRequest
+	}
+
+	// Checi if user already linked email
+	user, err := c.UserRepository.GetUserById(int(userId))
+	if err != nil {
+		log.Println(err)
+		return fiber.ErrInternalServerError
+	}
+
+	if user.Email != "" {
+		return fiber.NewError(fiber.StatusConflict, "User already linked email")
+	}
+
+	// Check if user already exists
+	isRegistered, err := c.UserRepository.IsUserRegistered(request.Email)
+	if err != nil {
+		log.Println(err)
+		return fiber.ErrInternalServerError
+	}
+	if isRegistered {
+		return fiber.NewError(fiber.StatusConflict, fmt.Sprintf("User with %s already exists", request.Email))
+	}
+
+	// Update user
+	user.Email = request.Email
+	err = c.UserRepository.Update(user)
+	if err != nil {
+		log.Println(err)
+		return fiber.ErrInternalServerError
+	}
+
+	return nil
+}

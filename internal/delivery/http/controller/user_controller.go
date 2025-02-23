@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"context"
 	"log"
 
 	"github.com/gofiber/fiber/v2"
@@ -58,6 +59,31 @@ func (c *UserController) Login(ctx *fiber.Ctx) error {
 		fiber.Map{
 			"message": "User logged in successfully",
 			"data":    response,
+		},
+	)
+}
+
+// link email
+func (c *UserController) LinkEmail(ctx *fiber.Ctx) error {
+	userid := ctx.Locals("user_id").(int64)
+	request := new(model.LinkEmailRequest)
+	err := ctx.BodyParser(request)
+	if err != nil {
+		log.Println(err)
+		return fiber.NewError(fiber.StatusBadRequest, "Failed to link email")
+	}
+
+	newCtx := context.WithValue(ctx.UserContext(), "user_id", userid)
+
+	err = c.userUC.LinkEmail(newCtx, request)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	return ctx.JSON(
+		fiber.Map{
+			"message": "Email linked successfully",
 		},
 	)
 }
