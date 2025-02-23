@@ -87,3 +87,27 @@ func (c *UserController) LinkEmail(ctx *fiber.Ctx) error {
 		},
 	)
 }
+
+func (c *UserController) LinkPhoneNumber(ctx *fiber.Ctx) error {
+	userid := ctx.Locals("user_id").(int64)
+	request := new(model.LinkPhoneRequest)
+	err := ctx.BodyParser(request)
+	if err != nil {
+		log.Println(err)
+		return fiber.NewError(fiber.StatusBadRequest, "Failed to link email")
+	}
+
+	newCtx := context.WithValue(ctx.UserContext(), "user_id", userid)
+
+	err = c.userUC.LinkPhoneNumber(newCtx, request)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	return ctx.JSON(
+		fiber.Map{
+			"message": "Phone Number linked successfully",
+		},
+	)
+}
