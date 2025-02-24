@@ -3,6 +3,7 @@ package config
 import (
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
+	"github.com/minio/minio-go/v7"
 	"github.com/rizkirmdhnnn/segokucing-be/internal/delivery/http/controller"
 	"github.com/rizkirmdhnnn/segokucing-be/internal/delivery/http/middleware"
 	"github.com/rizkirmdhnnn/segokucing-be/internal/delivery/http/route"
@@ -15,6 +16,7 @@ import (
 type BootstrapConfig struct {
 	DB       *gorm.DB
 	App      *fiber.App
+	Bucket   *minio.Client
 	Validate *validator.Validate
 	Config   *viper.Viper
 }

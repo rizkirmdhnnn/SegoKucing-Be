@@ -16,6 +16,9 @@ func main() {
 	// Initialize the validator
 	validate := config.NewValidator(cfg)
 
+	// Initialize the Minio client
+	bucket := config.NewBucket(cfg)
+
 	// Initialize the Fiber app
 	app := config.NewFiber(cfg)
 
@@ -23,6 +26,7 @@ func main() {
 	config.Bootstrap(&config.BootstrapConfig{
 		DB:       db,
 		App:      app,
+		Bucket:   bucket,
 		Validate: validate,
 		Config:   cfg,
 	})
