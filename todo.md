@@ -5,10 +5,10 @@
 ### Backlog
 
 - [ ] Update Profile
-- [ ] Upload Image
 
 ### In Progress
 
+- [x] Upload Image
 
 ### Completed
 

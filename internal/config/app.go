@@ -28,18 +28,21 @@ func Bootstrap(config *BootstrapConfig) {
 	tagsRepository := repository.NewTagRepository(config.DB)
 	commentRepository := repository.NewCommentRepository(config.DB)
 	friendRepository := repository.NewFriendRepository(config.DB)
+	fileRepository := repository.NewFileRepository(config.Bucket, config.Config.GetString("S3_BUCKET_NAME"))
 
 	//Usecase
 	userUseCase := usecase.NewUserUseCase(userRepository, config.Validate, config.Config)
 	postUseCase := usecase.NewPostUseCase(postRepository, tagsRepository, config.Validate, config.Config)
 	commentUseCase := usecase.NewCommentUseCase(commentRepository, friendRepository, postRepository, config.Validate, config.Config)
 	friendUseCase := usecase.NewFriendUsecase(friendRepository, userRepository, config.Validate, config.Config)
+	fileUseCase := usecase.NewFileUsecase(fileRepository)
 
 	//Controller
 	userController := controller.NewUserController(userUseCase)
 	PostController := controller.NewPostController(postUseCase)
 	commentController := controller.NewCommentController(commentUseCase)
 	friendController := controller.NewFriendController(friendUseCase)
+	fileController := controller.NewFileController(fileUseCase)
 
 	// // Middleware
 	authMiddleware := middleware.NewAuth(config.Config)
@@ -51,6 +54,7 @@ func Bootstrap(config *BootstrapConfig) {
 		PostController:    PostController,
 		CommentController: commentController,
 		FriendController:  friendController,
+		FileController:    fileController,
 		AuthMiddleware:    authMiddleware,
 	}
 

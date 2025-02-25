@@ -11,6 +11,7 @@ type RouteConfig struct {
 	PostController    *controller.PostController
 	CommentController *controller.CommentController
 	FriendController  *controller.FriendController
+	FileController    *controller.FileController
 	AuthMiddleware    fiber.Handler
 }
 
@@ -27,15 +28,22 @@ func (c *RouteConfig) SetupGuestRoute() {
 func (c *RouteConfig) SetupAuthenticatedRoute() {
 	c.App.Use(c.AuthMiddleware)
 
+	// User
 	c.App.Post("/v1/user/link", c.UserController.LinkEmail)
 	c.App.Post("/v1/user/link/phone", c.UserController.LinkPhoneNumber)
 
+	// Post
 	c.App.Post("/v1/post", c.PostController.CreatePost)
 	c.App.Get("/v1/post", c.PostController.GetPostList)
 
+	// Comment
 	c.App.Post("/v1/post/comment", c.CommentController.CreateComment)
 
+	// Friend
 	c.App.Post("/v1/friend", c.FriendController.AddFriend)
 	c.App.Get("/v1/friend", c.FriendController.GetFriendList)
 	c.App.Delete("/v1/friend", c.FriendController.RemoveFriend)
+
+	// File
+	c.App.Post("/v1/image", c.FileController.UploadImageProfile)
 }
