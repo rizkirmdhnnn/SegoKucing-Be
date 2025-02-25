@@ -32,7 +32,7 @@ func main() {
 	})
 
 	// Start the server
-	webPort := cfg.GetInt("APP_PORt")
+	webPort := cfg.GetInt("APP_PORT")
 	if err := app.Listen(fmt.Sprintf(":%d", webPort)); err != nil {
 		panic(err)
 	}
