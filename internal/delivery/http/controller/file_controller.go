@@ -26,6 +26,13 @@ func (f *FileController) UploadImageProfile(ctx *fiber.Ctx) error {
 		})
 	}
 
+	// Check content type
+	if ctx.Get("Content-Type") != "multipart/form-data" {
+		ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "invalid content type",
+		})
+	}
+
 	// Get file from form
 	file, err := ctx.FormFile("file")
 	if err != nil {
