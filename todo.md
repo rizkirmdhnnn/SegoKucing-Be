@@ -5,7 +5,6 @@
 ### Backlog
 
 - [ ] Update Profile
-- [ ] Setup Bucket
 - [ ] Upload Image
 
 ### In Progress
@@ -21,3 +20,4 @@
 - [x] Get all posts
 - [x] Create Comment
 - [x] Delete Friend
+- [x] Setup Bucket
