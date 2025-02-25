@@ -5,13 +5,15 @@
 ### Backlog
 
 - [ ] Update Profile
+- [ ] Setup Bucket
+- [ ] Upload Image
 
 ### In Progress
 
-- [x] Link Phone Number or Email to Account
 
 ### Completed
 
+- [x] Link Phone Number or Email to Account
 - [x] Add friend
 - [x] Create Post
 - [x] Authentication
