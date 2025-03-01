@@ -34,7 +34,7 @@ func Bootstrap(config *BootstrapConfig) {
 	config.Logger.Info("Repository initialized")
 
 	//Usecase
-	userUseCase := usecase.NewUserUseCase(userRepository, config.Validate, config.Config)
+	userUseCase := usecase.NewUserUseCase(userRepository, config.Validate, config.Config, config.Logger)
 	postUseCase := usecase.NewPostUseCase(postRepository, tagsRepository, config.Validate, config.Config)
 	commentUseCase := usecase.NewCommentUseCase(commentRepository, friendRepository, postRepository, config.Validate, config.Config)
 	friendUseCase := usecase.NewFriendUsecase(friendRepository, userRepository, config.Validate, config.Config)
@@ -43,14 +43,14 @@ func Bootstrap(config *BootstrapConfig) {
 
 	//Controller
 	userController := controller.NewUserController(userUseCase, config.Logger)
-	PostController := controller.NewPostController(postUseCase)
+	PostController := controller.NewPostController(postUseCase, config.Logger)
 	commentController := controller.NewCommentController(commentUseCase)
 	friendController := controller.NewFriendController(friendUseCase)
 	fileController := controller.NewFileController(fileUseCase)
 	config.Logger.Info("Controller initialized")
 
 	// // Middleware
-	authMiddleware := middleware.NewAuth(config.Config)
+	authMiddleware := middleware.NewAuth(config.Config, config.Logger)
 	config.Logger.Info("Middleware initialized")
 
 	// // Route
