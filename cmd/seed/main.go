@@ -11,8 +11,11 @@ func main() {
 	// Load configuration
 	cfg := config.NewViper()
 
+	// Initialize logger
+	logger := config.NewLogger(cfg)
+
 	// Connect to database
-	db := config.NewDatabase(cfg)
+	db := config.NewDatabase(cfg, logger)
 
 	// Seed data users
 	users := []entity.Users{

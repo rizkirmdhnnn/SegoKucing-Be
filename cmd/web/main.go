@@ -10,14 +10,17 @@ func main() {
 	// Initialize the configuration
 	cfg := config.NewViper()
 
+	// Initialize the logger
+	log := config.NewLogger(cfg)
+
 	// Initialize the database
-	db := config.NewDatabase(cfg)
+	db := config.NewDatabase(cfg, log)
 
 	// Initialize the validator
 	validate := config.NewValidator(cfg)
 
 	// Initialize the Minio client
-	bucket := config.NewBucket(cfg)
+	bucket := config.NewBucket(cfg, log)
 
 	// Initialize the Fiber app
 	app := config.NewFiber(cfg)
@@ -29,6 +32,7 @@ func main() {
 		Bucket:   bucket,
 		Validate: validate,
 		Config:   cfg,
+		Logger:   log,
 	})
 
 	// Start the server

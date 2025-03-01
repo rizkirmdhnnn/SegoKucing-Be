@@ -9,6 +9,7 @@ import (
 	"github.com/rizkirmdhnnn/segokucing-be/internal/delivery/http/route"
 	"github.com/rizkirmdhnnn/segokucing-be/internal/repository"
 	"github.com/rizkirmdhnnn/segokucing-be/internal/usecase"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )
@@ -19,6 +20,7 @@ type BootstrapConfig struct {
 	Bucket   *minio.Client
 	Validate *validator.Validate
 	Config   *viper.Viper
+	Logger   *logrus.Logger
 }
 
 func Bootstrap(config *BootstrapConfig) {
@@ -29,6 +31,7 @@ func Bootstrap(config *BootstrapConfig) {
 	commentRepository := repository.NewCommentRepository(config.DB)
 	friendRepository := repository.NewFriendRepository(config.DB)
 	fileRepository := repository.NewFileRepository(config.Bucket, config.Config.GetString("S3_BUCKET_NAME"))
+	config.Logger.Info("Repository initialized")
 
 	//Usecase
 	userUseCase := usecase.NewUserUseCase(userRepository, config.Validate, config.Config)
@@ -36,16 +39,19 @@ func Bootstrap(config *BootstrapConfig) {
 	commentUseCase := usecase.NewCommentUseCase(commentRepository, friendRepository, postRepository, config.Validate, config.Config)
 	friendUseCase := usecase.NewFriendUsecase(friendRepository, userRepository, config.Validate, config.Config)
 	fileUseCase := usecase.NewFileUsecase(fileRepository)
+	config.Logger.Info("Usecase initialized")
 
 	//Controller
-	userController := controller.NewUserController(userUseCase)
+	userController := controller.NewUserController(userUseCase, config.Logger)
 	PostController := controller.NewPostController(postUseCase)
 	commentController := controller.NewCommentController(commentUseCase)
 	friendController := controller.NewFriendController(friendUseCase)
 	fileController := controller.NewFileController(fileUseCase)
+	config.Logger.Info("Controller initialized")
 
 	// // Middleware
 	authMiddleware := middleware.NewAuth(config.Config)
+	config.Logger.Info("Middleware initialized")
 
 	// // Route
 	routeConfig := route.RouteConfig{
