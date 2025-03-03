@@ -5,12 +5,11 @@
 ### Backlog
 
 - [ ] Update Profile
-- [ ] Logging comments
 - [ ] Logging tags
 
 ### In Progress
 
-- [x] Upload Image
+- [x] Logging comments
 
 ### Completed
 
@@ -23,3 +22,4 @@
 - [x] Create Comment
 - [x] Delete Friend
 - [x] Setup Bucket
+- [x] Upload Image
