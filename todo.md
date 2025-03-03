@@ -5,6 +5,8 @@
 ### Backlog
 
 - [ ] Update Profile
+- [ ] Logging comments
+- [ ] Logging tags
 
 ### In Progress
 
